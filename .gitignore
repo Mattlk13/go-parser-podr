@@ -1,0 +1,6 @@
+*.o
+src/*
+!src/goldapple
+pkg/
+bin/
+.vscode
