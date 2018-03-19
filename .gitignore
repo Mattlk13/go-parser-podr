@@ -1,6 +1,7 @@
 *.o
+img/*
+!img/README
 src/*
-!src/goldapple
+!src/gapple
 pkg/
 bin/
-.vscode
