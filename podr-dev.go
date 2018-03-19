@@ -23,9 +23,9 @@ var DB string = os.Getenv("RIVE_MONGO_DB")
 func main() {
 
     client := redis.NewClient(&redis.Options{
-        Addr:     "localhost:6379",
-        Password: "", // no password set
-        DB:       0,  // use default DB
+        Addr: "localhost:6379",
+        Password: "",
+        DB: 0,
     })
 
     pong, err := client.Ping().Result()
