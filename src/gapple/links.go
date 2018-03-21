@@ -222,6 +222,18 @@ func ExtractCat(redis_cli *redis.Client, glob_session *mgo.Session) {
             }
         }
 
+        // Breadcrumbs end
+        if node.Type == html.ElementNode && node.Data == "span" {
+            for _, a := range node.Attr {
+                if a.Val == "breadcrumbs-item" {
+                    contents := renderNode(node)
+                    contents = extractContext(contents)
+                    contents = strings.Trim(contents, " ")
+                    Navi = append(Navi, contents)
+                }
+            }
+        }
+
         // Name + 1st try brand extract
         if node.Type == html.ElementNode && node.Data == "h1" {
             for _, a := range node.Attr {
@@ -350,7 +362,7 @@ func ExtractCat(redis_cli *redis.Client, glob_session *mgo.Session) {
 
 
     // *************************
-    i := 120
+    i := 1
     for i < 690 {
         //fmt.Println("https://www.podrygka.ru/catalog/?PAGEN_1="+strconv.Itoa(i))
         if i == 661 {break}
