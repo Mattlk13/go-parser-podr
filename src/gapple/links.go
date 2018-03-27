@@ -75,7 +75,7 @@ func ExtractCat(redis_cli *redis.Client, glob_session *mgo.Session) {
     var Navi []string
 
     type Product struct {
-        Articul, Name, Price, Country, Img, Brand, Navi, Url string
+        Articul, Name, Price, Country, Img, Brand, Navi, Url, Date string
     }
 
     type Price struct {
@@ -141,6 +141,7 @@ func ExtractCat(redis_cli *redis.Client, glob_session *mgo.Session) {
                             price.Name = product.Name
                             price.Price = product.Price
                             price.Date = MakeTimePrefix("")
+                            product.Date = MakeTimePrefix("")
                             fmt.Println(product)
 
                             // Insert new product
