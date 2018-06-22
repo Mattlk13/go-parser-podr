@@ -21,7 +21,7 @@ import (
 )
 
 // Add month prefix
-func makeTimeMonthlyPrefix(coll string) string {
+func MakeTimeMonthlyPrefix(coll string) string {
     t := time.Now()
     ti := t.Format("01-2006")
     fin := ti + "_" + coll
@@ -146,7 +146,7 @@ func ExtractCat(redis_cli *redis.Client, glob_session *mgo.Session) {
 
                             // Insert new product
                             c := session.DB("parser").C("PODR_products_final")
-                            d := session.DB("parser").C(makeTimeMonthlyPrefix("PODR_price"))
+                            d := session.DB("parser").C(MakeTimeMonthlyPrefix("PODR_price"))
                             session.SetMode(mgo.Monotonic, true)
 
                             // check double product
