@@ -36,3 +36,6 @@ sudo docker run --network host -d --restart always --log-driver syslog gapple/pa
 sudo docker ps
 sudo docker kill <image_name>
 ```
+
+
+
