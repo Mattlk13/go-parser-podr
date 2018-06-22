@@ -10,20 +10,12 @@ import (
     "github.com/blackjack/syslog"
 )
 
-const (
-    C_HOST = "0.0.0.0"
-    C_PORT = "8803"
-    C_TYPE = "tcp"
-)
+func _main() {
 
-const ENV_PREF = "prod"
-
-var DB string = os.Getenv("RIVE_MONGO_DB")
-
-func main() {
+    var DB string = os.Getenv("PODR_MONGO_DB")
 
     client := redis.NewClient(&redis.Options{
-        Addr: "localhost:6379",
+        Addr: "192.168.65.243:6379",
         Password: "",
         DB: 0,
     })
@@ -41,7 +33,7 @@ func main() {
     }
     fmt.Println(subscr)
 
-    session, glob_err := mgo.Dial("mongodb://apidev:apidev@localhost:27017/parser")
+    session, glob_err := mgo.Dial("mongodb://apidev:apidev@192.168.65.243:27017/parser")
     defer session.Close()
 
     if glob_err != nil {
