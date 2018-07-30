@@ -32,6 +32,7 @@ cd go-parser-podr
 sudo docker build -t gapple/go-parser-podr .
 # !!! network host -> localhost MongoDB
 sudo docker run --network host -d --restart always --log-driver syslog gapple/go-parser-podr:latest
+sudo docker run --network host -d --restart always --log-driver syslog registry.gitlab.com/r0bocop/go-parser-podr
 # Stop
 sudo docker ps
 sudo docker kill <image_name>

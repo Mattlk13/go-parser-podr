@@ -10,7 +10,7 @@ import (
     "github.com/blackjack/syslog"
 )
 
-func _main() {
+func main() {
 
     var DB string = os.Getenv("PODR_MONGO_DB")
 
