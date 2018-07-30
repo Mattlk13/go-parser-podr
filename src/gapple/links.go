@@ -72,14 +72,16 @@ func extractContext(s string) string {
 // https://www.podrygka.ru/catalog/?PAGEN_1=661
 func ExtractCat(redis_cli *redis.Client, glob_session *mgo.Session) {
 
+    fmt.Println("START", redis_cli, glob_session)
+
     var Navi []string
 
     type Product struct {
-        Articul, Name, Price, Country, Img, Brand, Navi, Url, Date string
+        Articul, Name, Price, OldPrice, Country, Img, Brand, Navi, Url, Date string
     }
 
     type Price struct {
-        Name, Price, Date string
+        Name, Price, OldPrice, Date string
     }
 
     var f func(*html.Node, *mgo.Session)
@@ -261,6 +263,42 @@ func ExtractCat(redis_cli *redis.Client, glob_session *mgo.Session) {
             }
         }
 
+        if node.Type == html.ElementNode && node.Data == "span" {
+            for _, a := range node.Attr {
+                if strings.Contains(a.Val, "price__item--current") {
+                    contents := renderNode(node)
+                    //contents = extractContext(contents)
+                    contents = strings.Replace(contents, "</span>", "", -1)
+                    contents = strings.Replace(contents, "<span class=\"price_value\">", "", -1)
+                    contents = strings.Replace(contents, "\n", "", -1)
+                    contents = strings.Replace(contents, "\r", "", -1)
+                    contents = strings.Replace(contents, "\t", "", -1)
+                    contents = strings.Replace(contents, "<span class=\"rouble\">", "", -1)
+
+                    product.Price = strings.Trim(contents, " ")
+                    fmt.Println("CURRENTPRICE", product.OldPrice)
+                }
+            }
+        }
+
+        if node.Type == html.ElementNode && node.Data == "span" {
+            for _, a := range node.Attr {
+                if strings.Contains(a.Val, "price__item--old") {
+                    contents := renderNode(node)
+                    //contents = extractContext(contents)
+                    contents = strings.Replace(contents, "</span>", "", -1)
+                    contents = strings.Replace(contents, "<span class=\"price_value\">", "", -1)
+                    contents = strings.Replace(contents, "\n", "", -1)
+                    contents = strings.Replace(contents, "\r", "", -1)
+                    contents = strings.Replace(contents, "\t", "", -1)
+                    contents = strings.Replace(contents, "<span class=\"rouble\">", "", -1)
+
+                    product.OldPrice = strings.Trim(contents, " ")
+                    fmt.Println("OLDPRICE", product.OldPrice)
+                }
+            }
+        }
+
         if node.Type == html.ElementNode && node.Data == "div" {
             for _, a := range node.Attr {
                 if a.Val == "product-detail__gallery-slider-item" {
@@ -365,6 +403,7 @@ func ExtractCat(redis_cli *redis.Client, glob_session *mgo.Session) {
     // *************************
     i := 1
     for i < 690 {
+        fmt.Println("I =:", i)
         //fmt.Println("https://www.podrygka.ru/catalog/?PAGEN_1="+strconv.Itoa(i))
         if i == 661 {break}
         request := gorequest.New()

@@ -22,7 +22,7 @@ const ENV_PREF = "prod"
 
 var DB string = os.Getenv("PODR_MONGO_DB")
 
-func main() {
+func _main() {
 
     r := gin.Default()
 
@@ -57,7 +57,7 @@ func main() {
         num, err := collections.Find(bson.M{"date": gapple.MakeTimePrefix("")}).Count()
 
         if err != nil {
-            panic(err)
+            fmt.Println(err)
         }
 
         if num > 1 {
