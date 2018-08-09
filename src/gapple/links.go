@@ -254,36 +254,17 @@ func ExtractCat(redis_cli *redis.Client, glob_session *mgo.Session) {
 
         if node.Type == html.ElementNode && node.Data == "span" {
             for _, a := range node.Attr {
-                if a.Val == "price_value" {
-                    contents := renderNode(node)
-                    contents = extractContext(contents)
-
-                    product.Price = strings.Trim(contents, " ")
-                }
-            }
-        }
-
-/*
-
-f1 https://www.podrygka.ru/catalog/makiyazh/guby/tint/155354-tint_dlya_gub_catrice_active_warrior_ton_01/
-CURRENTPRICE 69
-OLDPRICE DETECTED 375
-{155355 Тинт для губ `CATRICE` ACTIVE WARRIOR тон 02 69 375 ГЕРМАНИЯ/ GERMANY https://www.podrygka.ru/upload/iblock/129/1296395100b7a2a3caee30edac7a81b5.jpg CATRICE Каталог;Макияж;Губы;Тинт https://www.podrygka.ru/catalog/makiyazh/guby/tint/155354-tint_dlya_gub_catrice_active_warrior_ton_01/ 31-07-2018}
-AU Updated Тинт для губ `CATRICE` ACTIVE WARRIOR тон 02
-
-*/
-
-        if node.Type == html.ElementNode && node.Data == "span" {
-            for _, a := range node.Attr {
                 if strings.Contains(a.Val, "price__item--current") {
                     contents := renderNode(node)
                     //contents = extractContext(contents)
+			contents = strings.Replace(contents, "<span class=\"price_value\">", "", -1)
                     contents = strings.Replace(contents, "</span>", "", -1)
-                    contents = strings.Replace(contents, "<span class=\"price_value\">", "", -1)
+                    contents = strings.Replace(contents, "<span class=\"price__item price__item--current\">", "", -1)
                     contents = strings.Replace(contents, "\n", "", -1)
                     contents = strings.Replace(contents, "\r", "", -1)
                     contents = strings.Replace(contents, "\t", "", -1)
                     contents = strings.Replace(contents, "<span class=\"rouble\">", "", -1)
+			contents = strings.Replace(contents, "р.", "", -1)
 
                     product.Price = strings.Trim(contents, " ")
                     fmt.Println("CURRENTPRICE", product.Price)
@@ -297,14 +278,17 @@ AU Updated Тинт для губ `CATRICE` ACTIVE WARRIOR тон 02
                     contents := renderNode(node)
                     //contents = extractContext(contents)
                     contents = strings.Replace(contents, "</span>", "", -1)
-                    contents = strings.Replace(contents, "<span class=\"price_value\">", "", -1)
+			contents = strings.Replace(contents, "<span class=\"price_value\">", "", -1)
+			contents = strings.Replace(contents, "<span class=\"price__item price__item--old\">", "", -1)
+                    contents = strings.Replace(contents, "", "", -1)
                     contents = strings.Replace(contents, "\n", "", -1)
                     contents = strings.Replace(contents, "\r", "", -1)
                     contents = strings.Replace(contents, "\t", "", -1)
                     contents = strings.Replace(contents, "<span class=\"rouble\">", "", -1)
+			contents = strings.Replace(contents, "р.", "", -1)
 
                     product.OldPrice = strings.Trim(contents, " ")
-                    fmt.Println("OLDPRICE", product.OldPrice)
+                    fmt.Println("OLDPRICE DETECTED", product.OldPrice)
                 }
             }
         }

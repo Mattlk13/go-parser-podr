@@ -37,3 +37,6 @@ sudo docker run --network host -d --restart always --log-driver syslog registry.
 sudo docker ps
 sudo docker kill <image_name>
 ```
+
+
+
